@@ -17,7 +17,6 @@ import (
 
 var (
 	_defaultFilename = "default.jpeg"
-	_defaultPadding  = 40
 )
 
 // drawAndSaveToFile image with matrix
@@ -134,8 +133,18 @@ func draw(mat matrix.Matrix, opt *outputImageOptions) image.Image {
 		fmt.Printf("matrix.Width()=%d, matrix.Height()=%d\n", mat.Width(), mat.Height())
 	}
 
+	// Margin should be 4 or more module wide
+	margin := 4 * opt.qrBlockWidth()
+	if m := opt.margin; m > 0 {
+		if m >= margin {
+			margin = m
+		} else {
+			log.Printf("margin=%d is less than 4 times the QR width %d\n", m, margin)
+		}
+	}
+
 	// w as image width, h as image height
-	w := mat.Width()*opt.qrBlockWidth() + 2*_defaultPadding
+	w := mat.Width()*opt.qrBlockWidth() + 2*margin
 	h := w
 	// rgba := image.NewRGBA(image.Rect(0, 0, w, h))
 	dc := gg.NewContext(w, h)
@@ -159,8 +168,8 @@ func draw(mat matrix.Matrix, opt *outputImageOptions) image.Image {
 	mat.Iterate(matrix.ROW, func(x int, y int, v matrix.State) {
 		// Draw the block
 		ctx.upperLeft = image.Point{
-			X: x*opt.qrBlockWidth() + _defaultPadding,
-			Y: y*opt.qrBlockWidth() + _defaultPadding,
+			X: x*opt.qrBlockWidth() + margin,
+			Y: y*opt.qrBlockWidth() + margin,
 		}
 		ctx.color = opt.stateRGBA(v)
 		// DONE(@yeqown): make this abstract to Shapes

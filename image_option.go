@@ -35,12 +35,14 @@ type outputImageOptions struct {
 	// qrWidth width of each qr block
 	qrWidth int
 
+	// margin around the QR code
+	margin int
+
 	// shape means how to draw the shape of each cell.
 	shape IShape
 
 	// imageEncoder specify which file format would be encoded the QR image.
 	imageEncoder ImageEncoder
-
 }
 
 func (oo *outputImageOptions) backgroundColor() color.Color {

@@ -119,6 +119,13 @@ func WithQRWidth(width uint8) ImageOption {
 	})
 }
 
+// WithMargin specify the margin of the QR code
+func WithMargin(margin int) ImageOption {
+	return newFuncDialOption(func(oo *outputImageOptions) {
+		oo.margin = margin
+	})
+}
+
 // WithCircleShape use circle shape as rectangle(default)
 func WithCircleShape() ImageOption {
 	return newFuncDialOption(func(oo *outputImageOptions) {
@@ -163,4 +170,3 @@ func WithCustomImageEncoder(encoder ImageEncoder) ImageOption {
 		oo.imageEncoder = encoder
 	})
 }
-

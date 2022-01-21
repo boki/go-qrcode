@@ -2,6 +2,7 @@ package qrcode
 
 import (
 	"fmt"
+	"image"
 	"io"
 	"log"
 	"math"
@@ -630,6 +631,17 @@ func (q *QRCode) Save(saveToPath string) (err error) {
 func (q *QRCode) SaveTo(w io.Writer) error {
 	q.draw()
 	return drawAndSave(w, *q.mat, q.outputOption)
+}
+
+// Image returns the QRCode image
+func (q *QRCode) Image() image.Image {
+	q.draw()
+	imgOpt := q.outputOption
+	if imgOpt == nil {
+		imgOpt = defaultOutputImageOption()
+	}
+	img := draw(*q.mat, imgOpt)
+	return img
 }
 
 // draw from bitset to matrix.Matrix, calculate all mask modula score,

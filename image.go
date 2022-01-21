@@ -136,11 +136,10 @@ func draw(mat matrix.Matrix, opt *outputImageOptions) image.Image {
 	// Margin should be 4 or more module wide
 	margin := 4 * opt.qrBlockWidth()
 	if m := opt.margin; m > 0 {
-		if m >= margin {
-			margin = m
-		} else {
-			log.Printf("margin=%d is less than 4 times the QR width %d\n", m, margin)
+		if _debug && m < margin {
+			log.Printf("Warning: margin=%d is less than 4 times the QR width %d", m, margin)
 		}
+		margin = m
 	}
 
 	// w as image width, h as image height
@@ -197,8 +196,8 @@ func draw(mat matrix.Matrix, opt *outputImageOptions) image.Image {
 		upperLeft, lowerRight := bound.Min, bound.Max
 		logoWidth, logoHeight := lowerRight.X-upperLeft.X, lowerRight.Y-upperLeft.Y
 
-		if !validLogoImage(w, h, logoWidth, logoHeight) {
-			log.Printf("w=%d, h=%d, logoW=%d, logoH=%d, logo is over than 1/5 of QRCode \n",
+		if false && !validLogoImage(w, h, logoWidth, logoHeight) {
+			log.Printf("Warning: w=%d, h=%d, logoW=%d, logoH=%d, logo is over than 1/5 of QRCode",
 				w, h, logoWidth, logoHeight)
 			goto done
 		}
